@@ -88,15 +88,20 @@ public class Board implements Iterable<Tile> {
     public boolean move(int col, int row, Tile tile) {
         int pcol = viewPerspective.col(col, row, size()),
                 prow = viewPerspective.row(col, row, size());
+        // case1: the target position is the same as the one you enter:nothing happens
         if (tile.col() == pcol && tile.row() == prow) {
             return false;
         }
+        // find target tile's position: tile1
         Tile tile1 = vtile(col, row, viewPerspective);
+        // delete the current tile
         values[tile.col()][tile.row()] = null;
 
+        // case2: target tile is empty, move
         if (tile1 == null) {
             values[pcol][prow] = tile.move(pcol, prow);
             return false;
+            // case 3: target tile equals to the current tile, merge
         } else {
             values[pcol][prow] = tile.merge(pcol, prow, tile1);
             return true;

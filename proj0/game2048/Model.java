@@ -106,14 +106,80 @@ public class Model extends Observable {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
+
+    // TODO:
+    public int topEmptyTile(Side side, int col){
+        for (int row = size()-1;row>=0;row--){
+            if (board.tile(col, row) == null){
+                return row;
+            }
+        }
+
+        return -1;
+    }
+
+    public int[] oneColumn(Side side, int col){
+        int[] scoreAndChanged = {0, 0};
+        int oneColumnSore = 0;
+        // 先merge 再统一move
+        for (int row = size()-1;row>=0;row--){
+            Tile tempTile = board.tile(col, row);
+            if (tempTile == null){
+                continue;
+            }
+            else {
+                    int i = row - 1;
+
+                    while (i >= 0){
+                        if (board.tile(col, i) != null){
+                            break;
+                        }
+                        i--;
+                    }
+                    if (i < 0) continue;
+                    Tile tempNextTile = board.tile(col, i);
+                    if (tempNextTile.value() == tempTile.value()){
+                        board.move(tempTile.col(), tempTile.row(), tempNextTile);
+                        scoreAndChanged[0] += board.tile(tempTile.col(), tempTile.row()).value();
+                        scoreAndChanged[1] = 1;
+                    }
+                    row = i;
+                }
+            }
+
+        for (int row = size()-1;row>=0;row--){
+            Tile tempTile = board.tile(col, row);
+            int targetRow = topEmptyTile(side, col);
+            if (targetRow == -1) break;
+            if (tempTile != null){
+                board.move(col, targetRow, tempTile);
+                scoreAndChanged[1] = 1;
+            }
+        }
+
+        return scoreAndChanged;
+    }
+
     public boolean tilt(Side side) {
         boolean changed;
         changed = false;
+        /** We have two funtions in tile: tile.move tile.merge
+         * What we need to do is to judge how many tiles we need to operate(move or merge)
+         * */
+
 
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-
+        this.board.setViewingPerspective(side);
+        int oneTiltScore = 0;
+        for (int i = 0; i< size();i++){
+            int[] scoreAndChanged = oneColumn(side, i);
+            oneTiltScore += scoreAndChanged[0];
+            if (scoreAndChanged[1] == 1) changed = true;
+        }
+        this.score += oneTiltScore;
+        this.board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
@@ -138,7 +204,13 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        int count = 0;
+        for (int i = 0;i<b.size();i++){
+            for (int j = 0;j<b.size();j++){
+                if (b.tile(j, i) == null) count ++;
+            }
+        }
+        return count > 0 ;
     }
 
     /**
@@ -148,7 +220,13 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        int count = 0;
+        for (int i = 0;i<b.size();i++){
+            for (int j = 0;j<b.size();j++){
+                if (b.tile(j, i) != null) count += b.tile(j, i).value();
+            }
+        }
+        return count >= 2048;
     }
 
     /**
@@ -159,6 +237,19 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        int bSize = b.size();
+        for (int i =0;i<bSize;i++){
+            for (int j = 0;j<bSize;j++){
+                if (b.tile(j, i) == null) return true;
+                if (j < bSize - 1 && b.tile(j+1, i) != null){
+                    if (b.tile(j, i).value() == b.tile(j+1 , i).value()) return  true;
+                }
+                if (i < bSize - 1  && b.tile(j, i+1) != null){
+                    if (b.tile(j, i).value() == b.tile(j , i+1).value()) return  true;
+                }
+            }
+        }
+
         return false;
     }
 
