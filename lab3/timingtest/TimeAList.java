@@ -1,6 +1,8 @@
 package timingtest;
 import edu.princeton.cs.algs4.Stopwatch;
 
+import java.security.spec.AlgorithmParameterSpec;
+
 /**
  * Created by hug.
  */
@@ -23,5 +25,22 @@ public class TimeAList {
 
     public static void timeAListConstruction() {
         // TODO: YOUR CODE HERE
+        int degree = 20;
+        int base = 1000;
+        AList<Integer> L = new AList<Integer>();
+        AList<Integer> Ns = new AList<Integer>();
+        AList<Integer> opCounts = new AList<Integer>();
+        AList<Double> times = new AList<Double>();
+        for (int time = 1;time<200;time *= 2){
+            Stopwatch sw = new Stopwatch();
+            for(int i =0;i<time*base;i++){
+                L.addLast(1);
+            }
+            double secondsPast = sw.elapsedTime();
+            Ns.addLast(time*base);
+            times.addLast(secondsPast);
+            opCounts.addLast(time*base);
+        }
+        printTimingTable(Ns, times, opCounts);
     }
 }

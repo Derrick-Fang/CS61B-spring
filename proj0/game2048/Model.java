@@ -107,7 +107,6 @@ public class Model extends Observable {
      *    and the trailing tile does not.
      * */
 
-    // TODO:
     public int topEmptyTile(Side side, int col){
         for (int row = size()-1;row>=0;row--){
             if (board.tile(col, row) == null){
@@ -171,6 +170,7 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        // TODO: Unresolved problem -- directions
         this.board.setViewingPerspective(side);
         int oneTiltScore = 0;
         for (int i = 0; i< size();i++){
