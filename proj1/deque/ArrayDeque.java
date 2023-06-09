@@ -14,12 +14,12 @@ public class ArrayDeque<T> implements Deque<T>{
         rear = -1;
     }
 
-    ArrayDeque(int capacity){
-        this.array = (T[]) new Object[capacity];
-        this.size = 0;
-        front = 0;
-        rear = -1;
-    }
+//    ArrayDeque(int capacity){
+//        this.array = (T[]) new Object[capacity];
+//        this.size = 0;
+//        front = 0;
+//        rear = -1;
+//    }
 
     private T[] resize(){
         T[] newArray = (T[]) new Object[2*array.length];
