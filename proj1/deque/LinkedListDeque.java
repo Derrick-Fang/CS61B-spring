@@ -1,11 +1,11 @@
 package deque;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private int size;
     private LinkListNode head;
     private LinkListNode tail;
 
-    LinkedListDeque(){
+    public LinkedListDeque(){
         this.size = 0;
         this.head = new LinkListNode();
         this.tail = head;

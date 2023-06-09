@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -134,4 +135,17 @@ public class LinkedListDequeTest {
         }
 
     }
+    /**
+    @Test
+    public void randomTest(){
+        int N = 5000;
+        for (int i = 0;i<N;i++){
+            int randint = StdRandom.uniform(5);
+            switch (randint){
+                case 0:
+                    break;
+
+            }
+        }
+    }*/
 }
